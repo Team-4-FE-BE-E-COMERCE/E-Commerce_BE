@@ -10,7 +10,7 @@ type User struct {
 	gorm.Model
 	Name     string
 	Images   string
-	Phone    string
+	Phone    int
 	Email    string `gorm:"unique"`
 	Password string
 	Bio      string
