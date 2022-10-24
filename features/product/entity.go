@@ -21,7 +21,7 @@ type Cores struct {
 	Price     uint
 	Qty       uint
 	Detail    string
-	NameUser  uint
+	NameUser  string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
