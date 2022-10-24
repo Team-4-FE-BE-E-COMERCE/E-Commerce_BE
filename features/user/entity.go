@@ -1,18 +1,14 @@
 package user
 
-import (
-	"time"
-)
-
 type Core struct {
-	ID        uint
-	Name      string
-	Images    string
-	Phone     string
-	Email     string
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID       uint
+	Name     string
+	Images   string
+	Phone    string
+	Email    string
+	Password string
+	Bio      string
+	Saldo    uint
 }
 
 type UsecaseInterface interface {

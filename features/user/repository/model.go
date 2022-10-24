@@ -13,13 +13,15 @@ type User struct {
 	Phone    string
 	Email    string `gorm:"unique"`
 	Password string
+	Bio      string
+	Saldo    uint
 }
 
 func fromCore(dataCore user.Core) User {
 	dataModel := User{
-		Name:     dataCore.Name,
-		Images:   dataCore.Images,
-		Phone:    dataCore.Phone,
+		Name: dataCore.Name,
+		// Images:   dataCore.Images,
+		// Phone:    dataCore.Phone,
 		Email:    dataCore.Email,
 		Password: dataCore.Password,
 	}
@@ -35,6 +37,8 @@ func (data *User) toCore() user.Core {
 		Phone:    data.Phone,
 		Email:    data.Email,
 		Password: data.Password,
+		Bio:      data.Bio,
+		Saldo:    data.Saldo,
 	}
 
 }
