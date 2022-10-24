@@ -1,0 +1,1325 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: E-Commerce Project
+  description: API for Projcet E-Commerce
+  contact:
+    name: Hery
+    email: heribudiyana@gmail.com
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/HERIBUDIYANA/E-Commerce/1.0.0
+tags:
+  - name: Login
+    description: Login User
+  - name: Users
+    description: Management Data Users
+  - name: Products
+    description: Management Data Product
+  - name: Carts
+    description: Management Data Carts
+  - name: Orders
+    description: Management Data Orders
+
+paths:
+  /Users:
+    post:
+      tags:
+        - "Users"
+      summary: Register New Users
+      description: User Register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBodyRequest'
+            examples:
+              userData1:
+                description: User 1 Register New Users
+                value:
+                  name: "Herry"
+                  phone: "0812"
+                  email: "hery@gmail.com"
+                  password: "asdfqwer"
+              userData2:
+                description: User 2 Register New Users
+                value:
+                  name: "Dhany"
+                  phone: "0822"
+                  email: "dhany@gmail.com"
+                  password: "asdzxc"
+      responses:
+        '201':
+          $ref: '#/components/responses/successRegister'
+        '400':
+          $ref: '#/components/responses/failedRegister'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+    put:
+      tags:
+        - "Users"
+      summary: Update Users
+      description: Update Users
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json::
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+            example:
+              name: Hery
+              images: hery-depok.jpg
+              bio: "akun buat jajanin ayang"
+              phone: 08123
+              address: Green Andara Residence Blok F4 No. 12 samping rumah aa Rafi
+              email: hery@gmail.id
+              password: asdfghjk
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+            example:
+              name: Hery
+              images: hery-depok.jpg
+              bio: "akun buat jajanin ayang"
+              phone: 08123
+              address: Green Andara Residence Blok F4 No. 12 samping rumah aa Rafi
+              email: hery@gmail.id
+              password: asdfghjk
+      responses:
+        '200':
+          $ref: '#/components/responses/successUpdate'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+    delete:
+      tags:
+        - "Users"
+      summary: Delete My Account
+      description: Endpoint to delete my Account
+      security:
+        - JWTAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/successDelete'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+    get: 
+      tags:
+        - "Users"
+      summary: Get My Profile
+      description: Get My Profile Details
+      security:
+        - JWTAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/getProfile'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /users/{id}:
+    get:
+      tags:
+        - "Users"
+      summary: Get Profile Other User
+      description: Get Profile User
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/getProfileUser'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+
+      
+  /login:
+    post:
+      tags:
+        - "Login"
+      summary: Login User
+      description: Login User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginReq'
+            example:
+                  email: "hery@gmail.com"
+                  password: "asdfqwer"
+      responses:
+        '200':
+          description: Success Login
+          $ref: '#/components/responses/successLogin'
+        '400':
+          description: Failed Login
+          $ref: '#/components/responses/failedLogin'
+  /products:
+    post:
+      tags:
+        - "Products"
+      summary: Post My Product
+      description: Post Procudts for Sale
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductBodyReq'
+            example:
+              images: "kaos-polos.jpg"
+              name: "kaos polos"
+              description: "kaos polos bahan cotton combed"
+              stock: 12
+              price: 35000
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductBodyReq'
+            example:
+              images: "kaos-polos.jpg"
+              name: "kaos polos"
+              description: "kaos polos bahan cotton combed"
+              stock: 12
+              price: 35000
+      responses:
+        '201':
+          $ref: '#/components/responses/responses201'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+    get:
+      tags:
+        - "Products"
+      summary: Get All Products
+      description: Get All products
+      responses:
+        '200':
+          description: Success Get All Products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  myProduct:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      images:
+                        type: string
+                      name:
+                        type: string
+                      description: 
+                        type: string
+                      stock:
+                        type: integer
+                        format: number
+                      price:
+                        type: integer
+                        format: currency
+                      
+                example:
+                  status: Success
+                  message: Success Get All Products
+                  data:
+                  - id: 1
+                    images: "kaos-polos.jpg"
+                    name: "kaos polos"
+                    description: "kaos polos murah banget"
+                    stock: 12
+                    price: 35000
+                  - id: 199
+                    images: "Erigo-Jacket.jpg"
+                    name: "Erigo Casual Black"
+                    description: "Erigo New Arrivals"
+                    stock: 28
+                    price: 300000
+                  - id: 34
+                    images: "kaos-hitam.jpg"
+                    name: "kaos hitam"
+                    description: "kaos hitam casual"
+                    stock: 12
+                    price: 50000
+                  - id: 190
+                    images: "sneakers-nike-air.jpg"
+                    name: "Nike Air"
+                    description: "Nike Air Original Made in USA"
+                    stock: 3
+                    price: 500000
+                  - id: 122
+                    images: "sneakers-Adidas.jpg"
+                    name: "Adidas Casual"
+                    description: "Adidas Black Original Made in USA"
+                    stock: 77
+                    price: 700000
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+
+
+  /myproducts:
+    get:
+      tags:
+        - "Products"
+      summary: Get All My Products
+      description: All My Products
+      security:
+        - JWTAuth: []
+      responses:
+        '200':
+          description: Success Get My Products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  myProduct:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      images:
+                        type: string
+                      name:
+                        type: string
+                      description: 
+                        type: string
+                      stock:
+                        type: integer
+                        format: number
+                      price:
+                        type: integer
+                        format: currency
+                      
+                example:
+                  status: Success
+                  message: Success Get My Products
+                  data:
+                  - id: 1
+                    images: "kaos-polos.jpg"
+                    name: "kaos polos"
+                    description: "kaos polos murah banget"
+                    stock: 12
+                    price: 35000
+                  - id: 34
+                    images: "kaos-hitam.jpg"
+                    name: "kaos hitam"
+                    description: "kaos hitam casual"
+                    stock: 12
+                    price: 50000
+                  - id: 190
+                    images: "sneakers-nike-air.jpg"
+                    name: "Nike Air"
+                    description: "Nike Air Original Made in USA"
+                    stock: 3
+                    price: 500000
+        '400':
+          $ref: '#/components/responses/failedRespon'
+  /myproducts/{id}:
+    put:
+      tags:
+        - "Products"
+      summary: Update My products
+      description: Update My Products
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/productUpdate'
+            example:
+              images: "kaos-polos.jpg"
+              name: "kaos polos"
+              description: "kaos polos bahan cotton combed"
+              stock: 12
+              price: 35000
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/productUpdate'
+            example:
+              images: "kaos-polos.jpg"
+              name: "kaos polos"
+              description: "kaos polos bahan cotton combed"
+              stock: 12
+              price: 35000
+      responses:
+        '200':
+          $ref: '#/components/responses/successUpdate'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+    delete:
+      tags:
+        - "Products"
+      summary: delete My Products
+      description: Delete My Product By id
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/successDelete'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /products/{id}:
+    get:
+      tags:
+        - "Products"
+      summary: Get Details Products
+      description: Get Products By id
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/getProductId'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /carts:
+    post:
+      tags:
+        - "Carts"
+      summary: Add to Cart
+      description: Add Product To My cart
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartReqBody'
+            examples:
+              product1:
+                description: Add Product
+                value:
+                  product_id: 1
+                  qty: 1
+              product2:
+                description: Add Product
+                value:
+                  product_id: 2
+                  qty: 2
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessAddCart'
+    get:
+      tags:
+        - "Carts"
+      summary: Get Products At Cart
+      description: View Cart Contents
+      security:
+        - JWTAuth: []
+      responses:
+        '200':
+          description: Get All cart Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  myCart:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      qty:
+                        type: integer
+                        format: number
+                      price:
+                        type: integer
+                        format: currency
+                      total_price:
+                        type: integer
+                        format: currency
+              example:
+                status: success
+                message: success get my cart
+                myCart:
+                  -   id: 12
+                      name: Sepatu Kaca
+                      price: 200000
+                      qty: 1
+                      total_price: 200000
+                  -  id: 13
+                     name: Sepatu kulit
+                     price: 100000
+                     qty: 2
+                     total_price: 200000
+                  -  id: 28
+                     name: Kaos Lengan Panjang
+                     price: 100000
+                     qty: 5
+                     total_price: 500000           
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /carts/{id}:
+    put:
+      tags:
+        - "Carts"
+      summary: Update Carts
+      description: Update Qty Product At Cart
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartUpdateRequest'
+            example:
+              qty: 2
+      responses:
+        '200':
+          $ref: '#/components/responses/successUpdate'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+    delete:
+      tags:
+        - "Carts"
+      summary: Delete My Cart By Id
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/successDelete'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /orders:
+    post:
+      tags:
+        - "Orders"
+      summary: Checkout
+      description: User Checkout Product
+      security:
+        - JWTAuth: []
+      
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#'
+            example:
+              cart_id: 2 , 3
+              address: 
+                street: "Jalan Margonda Raya"
+                city: "Depok"
+                province: "Jawa Barat"
+                postal_code: "16533"
+              payment: 
+                payment_name: "Mastercard"
+                card_number: "1111-2222-3333-4444"
+                payment_code: "2999"
+      responses:
+        '201':
+          $ref: '#/components/responses/responsesCheckoutSuccess'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+
+  /orders/{id}/confirm:
+    put:
+      tags:
+        - "Orders"
+      summary: Confirm Order
+      description: Confirm your Order
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses: 
+        '200':
+          $ref: '#/components/responses/successConfirm'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /orders/{id}/cancelled:
+    put:
+      tags:
+        - "Orders"
+      summary: Cancel Order
+      description: Cancel your Order
+      security:
+        - JWTAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses: 
+        '200':
+          $ref: '#/components/responses/OrderCancelled'
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+  /orders/history:
+    get:
+      tags:
+        - "Orders"
+      summary: Get History Order
+      security:
+        - JWTAuth: []
+      parameters: []
+      
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      user_id:
+                        type: string
+                      qty:
+                        type: integer
+                      total_price:
+                        type: integer
+                      status: 
+                        type: string
+                      payment_method:
+                        type: string
+                      created_at:
+                        type: string
+                        format: date
+                      product:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          price:
+                            type: integer                  
+              example:
+                      status: "success"
+                      message: "success operation get data"
+                      data:
+                        - id: 4
+                          user_id: 12
+                          qty: 2
+                          total_price: 200000
+                          status: "Confirm"
+                          product:
+                            id: 2
+                            name: "kaos cepean"
+                            price: 100000
+                          payment_method: "master card"
+                          created_at: "2022/10/25"
+                        - id: 5
+                          user_id: 12
+                          qty: 1
+                          total_price: 500000
+                          status: "Cancelled"
+                          product:
+                            id: 2
+                            name: "Nike Air Max"
+                            price: 500000
+                          payment_method: "master card"
+                          created_at: "2022/10/28"
+        '400':
+          $ref: '#/components/responses/failedRespon'
+        '500':
+          $ref: '#/components/responses/failedRespon500'
+
+components:
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserLoginReq:
+      type: object
+      properties:
+        "email":
+          type: string
+          minLength: 1
+        "password":
+          type: string
+          format: password
+    UserBodyRequest:
+      type: object
+      properties:
+        "name":
+          type: string
+          minLength: 1
+        "phone":
+          type: string
+          minLength: 1
+        "email":
+          type: string
+          minLength: 1
+        "password":
+          type: string
+          minLength: 1
+          format: password
+    OrderBodyRequest:
+      type: object
+      properties:
+        "name":
+          type: string
+          minLength: 1
+        "street":
+          type: string
+          minLength: 1
+        "city":
+          type: string
+          minLength: 1
+        "province":
+          type: string
+          minLength: 1
+        "postal_code":
+          type: string
+          minLength: 1
+        "payment_method":
+          type: string
+          minLength: 1
+    UserUpdateRequest:
+      type: object
+      properties:
+        "name":
+          type: string
+          minLength: 3
+        "phone":
+          type: string
+          minLength: 3
+        "email":
+          type: string
+          minLength: 3
+        "password":
+          type: string
+          format: password
+          minLength: 3
+        "images":
+          type: string
+        "bio":
+          type: string
+          maxLength: 50
+        "address":
+          type: string
+    CartUpdateRequest:
+      type: object
+      properties:
+        "qty":
+          type: integer
+          format: number
+          minLength: 1
+    productUpdate:
+      type: object
+      properties:
+        "images":
+          type: string
+          minLength: 3
+        "name":
+          type: string
+          minLength: 3
+        "description":
+          type: string
+          minLength: 3
+        "price":
+          type: integer
+          format: number
+          minLength: 3
+        "stock":
+          type: integer
+    ProductBodyReq:
+      type: object
+      properties:
+        images:
+          type: string
+        name:
+          type: string
+          maxLength: 30
+        description:
+          type: string
+          maxLength: 100
+        stock:
+          type: integer
+          minimum: 1
+        price:
+          type: integer
+          format: currency
+          minLength: 4
+    CartReqBody:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          format: number
+        qty:
+          type: integer
+          format: number
+  responses:
+    getProfile: 
+      description: Success Get My profile
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                # example: Success
+              message:
+                type: string
+                # example: Success Get My Profile
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    # example: 1
+                  images:
+                    type: string
+                    # example: "hery-image.jpg"
+                  name:
+                    type: string
+                    # example: "Hery"
+                  phone: 
+                    type: string
+                    # example: "0812"
+                  email:
+                    type: string
+                    # example: "Hery@gmail.com"
+                  address:
+                    type: string
+                    # example: "Jl. Margonda raya - Depok"
+                  saldo:
+                    type: string
+                    # example: "500.000"
+                  bio: 
+                    type: string
+                    # example: "Jajan kalo punya duit jangan nahan bae ett dehh"
+                  product:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        # example: 1
+                      images:
+                        type: string
+                        # example: "sepatu-sultan.jpg"
+                      name:
+                        type: string
+                        # example: "Sepatu Sultan"
+                      price:
+                        type: integer
+                        # example: 2000000
+                      stock:
+                        type: integer
+                        # example: 12
+          example:
+            message: Success Get My Profile
+            data:
+              id: 1
+              name: "Hery"
+              images: "hery-depok.jpg"
+              saldo: "1000000000"
+              email: "Hery@gmail.com"
+              phone: "08123"
+              address: "Jl. Margonda raya - Depok"
+              bio: "Jajan kalo punya duit jangan nahan bae ett dehh"
+              product:
+                - id: 12
+                  images: "sepatu-sultan.jpg"
+                  name: "Sepatu Sultan"
+                  price: 5000000
+                  stock: 12
+                - id: 15
+                  images: "baju-sultan.jpg"
+                  name: "Baju Sultan"
+                  price: 10000000
+                  stock: 12
+                - id: 25
+                  images: "jacket-sultan.jpg"
+                  name: "Jacket Sultan"
+                  price: 9900000
+                  stock: 12
+    getProfileUser: 
+      description: Success Get My profile
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                # example: Success
+              message:
+                type: string
+                # example: Success Get My Profile
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    # example: 1
+                  images:
+                    type: string
+                    # example: "hery-image.jpg"
+                  name:
+                    type: string
+                    # example: "Hery"
+                  phone: 
+                    type: string
+                    # example: "0812"
+                  email:
+                    type: string
+                    # example: "Hery@gmail.com"
+                  address:
+                    type: string
+                    # example: "Jl. Margonda raya - Depok"
+                  saldo:
+                    type: string
+                    # example: "500.000"
+                  bio: 
+                    type: string
+                    # example: "Jajan kalo punya duit jangan nahan bae ett dehh"
+                  product:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        # example: 1
+                      images:
+                        type: string
+                        # example: "sepatu-sultan.jpg"
+                      name:
+                        type: string
+                        # example: "Sepatu Sultan"
+                      price:
+                        type: integer
+                        # example: 2000000
+                      stock:
+                        type: integer
+                        # example: 12
+          example:
+            message: Success Get My Profile
+            data:
+              id: 1
+              name: "Dhany"
+              images: "images.jpg"
+              saldo: "1000000000"
+              email: "Dhany@gmail.com"
+              phone: "08111"
+              address: "Jl. Merpati - Depok"
+              bio: "i Want to buy your products and shell My products"
+              product:
+                - id: 11
+                  images: "sweater.png"
+                  name: "Sweater Casual"
+                  price: 5000000
+                  stock: 12
+                - id: 14
+                  images: "jacket.jpg"
+                  name: "Jacket Casual"
+                  price: 10000000
+                  stock: 12
+                - id: 24
+                  images: "sneakers.jpg"
+                  name: "Sneakers Casual"
+                  price: 9900000
+                  stock: 12
+                      
+    getProductId: 
+      description: Success Get Details Product
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Success Get Product Details
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 14
+                  images:
+                    type: string
+                    example: "Sneakers.jpg"
+                  name:
+                    type: string
+                    example: "Nike Air Jordan"
+                  description: 
+                    type: string
+                    example: "Original Product Made in USA"
+                  price:
+                    type: integer
+                    example: 3000000
+                  stock:
+                    type: integer
+                    example: 3
+    SuccessAddCart:
+      description: Success add products to cart
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              message: 
+                type: string
+                example: Success Add To Carts
+    myProductResponse: 
+      description: Success Get My Products
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Success Get My Products
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  images:
+                    type: string
+                  name:
+                    type: string
+                  description: 
+                    type: string
+                  stock:
+                    type: integer
+                    format: number
+                  price:
+                    type: integer
+                    format: currency
+    GetAllProductResponse: 
+      description: Success Get All Products
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Success Get My Products
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  images:
+                    type: string
+                  name:
+                    type: string
+                  description: 
+                    type: string
+                  stock:
+                    type: integer
+                    format: number
+                  price:
+                    type: integer
+                    format: currency
+    GetAllCarts: 
+      description: Success Get All Carts
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Success Get My Carts
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  qty:
+                    type: integer
+                    format: number
+                  price:
+                    type: integer
+                    format: currency
+                  total_price:
+                    type: integer
+                    format: currency
+    failedRespon:
+      description: Status Response Failed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Failed Response
+              message:
+                type: string
+                example: Failed
+    failedRespon500:
+      description: Status Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Failed
+              message:
+                type: string
+                example: Failed Status Internal Server Error
+    successRespon:
+      description: Status Response Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success Response
+              message:
+                type: string
+                example: Success
+    responses201:
+      description: Status Created Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Success Created
+    responsesCheckoutSuccess:
+      description: Status Checkout Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Success Checkout Please Confirm
+    successRegister:
+      description: Success Register New Users
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Register Success
+    successUpdate:
+      description: Success Update
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Update Success
+    successConfirm:
+      description: Success Confirm
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Order Confirmed
+    OrderCancelled:
+      description: Success Order Cancellerd
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Order Cancelled
+    successDelete:
+      description: Success Delete
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success
+              message:
+                type: string
+                example: Delete Success
+    failedRegister:
+      description: Failed Register New Users
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Failed
+              message:
+                type: string
+                example: Failed Register New Users
+    successLogin:
+      description: Success Login
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Success Login
+              message:
+                type: string
+                example: Success Login User
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Hery
+                  token:
+                    type: string
+                    example: eyJjlcmnjen.jiyYdjoLjsjbcnejg$bvklsd.LSDmcuvuvdbk
+    failedLogin:
+      description: Failed Login
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: Failed
+              message:
+                type: string
+                example: Failed Login Users
+        
