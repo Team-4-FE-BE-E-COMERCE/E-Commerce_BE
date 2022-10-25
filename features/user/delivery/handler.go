@@ -1,9 +1,11 @@
 package delivery
 
 import (
+	"log"
 	"net/http"
 	"project/e-commerce/features/user"
 	"project/e-commerce/middlewares"
+	"project/e-commerce/utils/helper"
 	"strconv"
 
 	// "project/e-commerce/utils/helper"
@@ -36,6 +38,19 @@ func (delivery *UserDelivery) PostData(c echo.Context) error {
 		})
 	}
 
+	file, errFile := c.FormFile("images")
+	if file != nil {
+		res, err := helper.UploadProfile(c)
+		if err != nil {
+			return err
+		}
+		log.Print(res)
+		dataRequest.Images = res
+	}
+	if errFile != nil {
+		return errFile
+	}
+
 	row, err := delivery.userUsecase.PostData(toCore(dataRequest))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
@@ -60,6 +75,19 @@ func (delivery *UserDelivery) UpdateUser(c echo.Context) error {
 		return c.JSON(400, map[string]interface{}{
 			"message": "error Bind data",
 		})
+	}
+
+	file, errFile := c.FormFile("images")
+	if file != nil {
+		res, err := helper.UploadProfile(c)
+		if err != nil {
+			return err
+		}
+		log.Print(res)
+		dataUpdate.Images = res
+	}
+	if errFile != nil {
+		return errFile
 	}
 
 	var add user.Core
