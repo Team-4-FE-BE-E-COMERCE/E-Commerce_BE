@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	// "log"
 	"project/e-commerce/features/user"
 
 	"golang.org/x/crypto/bcrypt"
@@ -37,5 +38,35 @@ func (usecase *userUsecase) PostData(data user.Core) (int, error) {
 		return -1, err
 	}
 
+	return row, nil
+}
+
+func (usecase *userUsecase) PutDataId(data user.Core) (int, error) {
+	row, err := usecase.userData.UpdateData(data)
+	return row, err
+}
+
+func (service *userUsecase) GetProfile(token int) (user.Core, error) {
+	dataId, err := service.userData.MyProfile(token)
+	if err != nil {
+		return user.Core{}, err
+	}
+	return dataId, nil
+}
+func (service *userUsecase) GetDataId(param, token int) (user.Core, error) {
+
+	dataId, err := service.userData.SelectDataId(param, token)
+	if err != nil {
+		return user.Core{}, err
+	}
+
+	return dataId, nil
+
+}
+func (usecase *userUsecase) DeleteAkun(token int) (int, error) {
+	row, err := usecase.userData.DeleteData(token)
+	if err != nil {
+		return -1, err
+	}
 	return row, nil
 }
