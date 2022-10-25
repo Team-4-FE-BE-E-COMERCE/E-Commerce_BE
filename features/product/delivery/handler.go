@@ -36,7 +36,7 @@ func (ph *productHandler) Create() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, failResponse("cannot bind input"))
 		}
 
-		file, errFile := c.FormFile("images")
+		file, _ := c.FormFile("images")
 		if file != nil {
 			res, err := helper.UploadProfile(c)
 			if err != nil {
@@ -44,9 +44,9 @@ func (ph *productHandler) Create() echo.HandlerFunc {
 			}
 			input.Images = res
 		}
-		if errFile != nil {
-			return errFile
-		}
+		// if errFile != nil {
+		// 	return errFile
+		// }
 
 		cnv := ToCore(input)
 		res, err := ph.srv.Create(cnv)
@@ -68,7 +68,7 @@ func (ph *productHandler) Update() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, failResponse("cannot bind input"))
 		}
 
-		file, errFile := c.FormFile("images")
+		file, _ := c.FormFile("images")
 		if file != nil {
 			res, err := helper.UploadProfile(c)
 			if err != nil {
@@ -76,9 +76,9 @@ func (ph *productHandler) Update() echo.HandlerFunc {
 			}
 			input.Images = res
 		}
-		if errFile != nil {
-			return errFile
-		}
+		// if errFile != nil {
+		// 	return errFile
+		// }
 
 		cnv := ToCore(input)
 		res, err := ph.srv.Update(cnv, uint(id))

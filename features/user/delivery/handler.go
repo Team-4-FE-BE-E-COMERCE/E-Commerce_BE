@@ -38,7 +38,7 @@ func (delivery *UserDelivery) PostData(c echo.Context) error {
 		})
 	}
 
-	file, errFile := c.FormFile("images")
+	file, _ := c.FormFile("images")
 	if file != nil {
 		res, err := helper.UploadProfile(c)
 		if err != nil {
@@ -47,9 +47,9 @@ func (delivery *UserDelivery) PostData(c echo.Context) error {
 		log.Print(res)
 		dataRequest.Images = res
 	}
-	if errFile != nil {
-		return errFile
-	}
+	// if errFile != nil {
+	// 	return errFile
+	// }
 
 	row, err := delivery.userUsecase.PostData(toCore(dataRequest))
 	if err != nil {
@@ -77,7 +77,7 @@ func (delivery *UserDelivery) UpdateUser(c echo.Context) error {
 		})
 	}
 
-	file, errFile := c.FormFile("images")
+	file, _ := c.FormFile("images")
 	if file != nil {
 		res, err := helper.UploadProfile(c)
 		if err != nil {
@@ -86,9 +86,9 @@ func (delivery *UserDelivery) UpdateUser(c echo.Context) error {
 		log.Print(res)
 		dataUpdate.Images = res
 	}
-	if errFile != nil {
-		return errFile
-	}
+	// if errFile != nil {
+	// 	return errFile
+	// }
 
 	var add user.Core
 	if dataUpdate.Email != "" {
