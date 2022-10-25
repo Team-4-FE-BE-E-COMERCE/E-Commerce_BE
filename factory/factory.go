@@ -11,6 +11,10 @@ import (
 	userDelivery "project/e-commerce/features/user/delivery"
 	userData "project/e-commerce/features/user/repository"
 	userUsecase "project/e-commerce/features/user/service"
+
+	productDelivery "project/e-commerce/features/product/delivery"
+	productData "project/e-commerce/features/product/repository"
+	productUsecase "project/e-commerce/features/product/service"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -22,5 +26,9 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	authDataFactory := loginData.New(db)
 	authUsecaseFactory := authUsecase.New(authDataFactory)
 	authDelivery.New(e, authUsecaseFactory)
+
+	productDataFactory := productData.New(db)
+	productUsecaseFactory := productUsecase.New(productDataFactory)
+	productDelivery.New(e, productUsecaseFactory)
 
 }
