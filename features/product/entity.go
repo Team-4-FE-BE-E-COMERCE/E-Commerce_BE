@@ -3,18 +3,12 @@ package product
 import "time"
 
 type User struct {
-	ID       uint `gorm:"primary_key"`
-	Name     string
-	Images   string
-	Phone    string
-	Email    string `gorm:"unique"`
-	Password string
-	Bio      string
-	Saldo    uint
+	ID   uint `gorm:"primary_key"`
+	Name string
 }
 type Core struct {
 	ID        uint `gorm:"primary_key"`
-	Image     string
+	Images    string
 	Name      string
 	Price     uint
 	Qty       uint

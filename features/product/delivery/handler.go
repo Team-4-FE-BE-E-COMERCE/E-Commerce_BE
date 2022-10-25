@@ -1,17 +1,13 @@
 package delivery
 
 import (
-	"context"
 	"net/http"
 	cf "project/e-commerce/config"
 	"project/e-commerce/features/product"
 	"project/e-commerce/middlewares"
+	"project/e-commerce/utils/helper"
 	"strconv"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -36,50 +32,28 @@ func (ph *productHandler) Create() echo.HandlerFunc {
 		userId := middlewares.ExtractToken(c)
 		input.UserID = uint(userId)
 
-		cfg, errDef := config.LoadDefaultConfig(context.TODO())
-		if errDef != nil {
-			var erroDef string = "error: "
-			erroDef += erroDef
-			return c.JSON(http.StatusBadRequest, failResponse(erroDef))
+		if err := c.Bind(&input); err != nil {
+			return c.JSON(http.StatusBadRequest, failResponse("cannot bind input"))
 		}
-		client := s3.NewFromConfig(cfg)
-		uploader := manager.NewUploader(client)
 
-		isSuccess := true
-		file, err := c.FormFile("img")
+		file, errFile := c.FormFile("images")
+		if file != nil {
+			res, err := helper.UploadProfile(c)
+			if err != nil {
+				return err
+			}
+			input.Images = res
+		}
+		if errFile != nil {
+			return errFile
+		}
+
+		cnv := ToCore(input)
+		res, err := ph.srv.Create(cnv)
 		if err != nil {
-			isSuccess = false
-		} else {
-			src, err := file.Open()
-			if err != nil {
-				isSuccess = false
-			} else {
-				result, errImg := uploader.Upload(context.TODO(), &s3.PutObjectInput{
-					Bucket: aws.String("alta-e-commerce"),
-					Key:    aws.String(file.Filename),
-					Body:   src,
-					ACL:    "public-read",
-				})
-				if errImg != nil {
-					return c.JSON(http.StatusBadRequest, failResponse("failed upload image"))
-				}
-				input.Image = result.Location
-			}
-			defer src.Close()
+			return c.JSON(http.StatusInternalServerError, failResponse(err.Error()))
 		}
-
-		if isSuccess {
-			if err := c.Bind(&input); err != nil {
-				return c.JSON(http.StatusBadRequest, failResponse("cannot bind input"))
-			}
-			cnv := ToCore(input)
-			res, err := ph.srv.Create(cnv)
-			if err != nil {
-				return c.JSON(http.StatusInternalServerError, failResponse(err.Error()))
-			}
-			return c.JSON(http.StatusCreated, successResponse("success create new product", toResponse(res, "product")))
-		}
-		return c.JSON(http.StatusBadRequest, failResponse("failed upload image"))
+		return c.JSON(http.StatusCreated, successResponse("success create new product", toResponse(res, "product")))
 	}
 }
 
@@ -90,50 +64,28 @@ func (ph *productHandler) Update() echo.HandlerFunc {
 		userId := middlewares.ExtractToken(c)
 		input.UserID = uint(userId)
 
-		cfg, errDef := config.LoadDefaultConfig(context.TODO())
-		if errDef != nil {
-			var erroDef string = "error: "
-			erroDef += erroDef
-			return c.JSON(http.StatusBadRequest, failResponse(erroDef))
+		if err := c.Bind(&input); err != nil {
+			return c.JSON(http.StatusBadRequest, failResponse("cannot bind input"))
 		}
-		client := s3.NewFromConfig(cfg)
-		uploader := manager.NewUploader(client)
 
-		isSuccess := true
-		file, err := c.FormFile("img")
+		file, errFile := c.FormFile("images")
+		if file != nil {
+			res, err := helper.UploadProfile(c)
+			if err != nil {
+				return err
+			}
+			input.Images = res
+		}
+		if errFile != nil {
+			return errFile
+		}
+
+		cnv := ToCore(input)
+		res, err := ph.srv.Update(cnv, uint(id))
 		if err != nil {
-			isSuccess = false
-		} else {
-			src, err := file.Open()
-			if err != nil {
-				isSuccess = false
-			} else {
-				result, errImg := uploader.Upload(context.TODO(), &s3.PutObjectInput{
-					Bucket: aws.String("alta-e-commerce"),
-					Key:    aws.String(file.Filename),
-					Body:   src,
-					ACL:    "public-read",
-				})
-				if errImg != nil {
-					return c.JSON(http.StatusBadRequest, failResponse("failed upload image"))
-				}
-				input.Image = result.Location
-			}
-			defer src.Close()
+			return c.JSON(http.StatusInternalServerError, failResponse(err.Error()))
 		}
-
-		if isSuccess {
-			if err := c.Bind(&input); err != nil {
-				return c.JSON(http.StatusBadRequest, failResponse("cannot bind input"))
-			}
-			cnv := ToCore(input)
-			res, err := ph.srv.Update(cnv, uint(id))
-			if err != nil {
-				return c.JSON(http.StatusInternalServerError, failResponse(err.Error()))
-			}
-			return c.JSON(http.StatusCreated, successResponse("success update product", toResponse(res, "product")))
-		}
-		return c.JSON(http.StatusBadRequest, failResponse("failed upload image"))
+		return c.JSON(http.StatusCreated, successResponse("success update product", toResponse(res, "product")))
 	}
 }
 

@@ -7,7 +7,7 @@ import (
 
 type ProductResponse struct {
 	ID        uint
-	Image     string
+	Images    string
 	Name      string
 	Price     uint
 	Qty       uint
@@ -23,12 +23,12 @@ func toResponse(core interface{}, code string) interface{} {
 	switch code {
 	case "product":
 		cnv := core.(product.Core)
-		res = ProductResponse{ID: cnv.ID, Image: cnv.Image, Name: cnv.Name, Price: cnv.Price, Qty: cnv.Qty, Detail: cnv.Detail, UserID: cnv.UserID, User: cnv.User.Name, CreatedAt: cnv.CreatedAt, UpdatedAt: cnv.UpdatedAt}
+		res = ProductResponse{ID: cnv.ID, Images: cnv.Images, Name: cnv.Name, Price: cnv.Price, Qty: cnv.Qty, Detail: cnv.Detail, UserID: cnv.UserID, User: cnv.User.Name, CreatedAt: cnv.CreatedAt, UpdatedAt: cnv.UpdatedAt}
 	case "all":
 		var res []ProductResponse
 		cnv := core.([]product.Core)
 		for _, val := range cnv {
-			res = append(res, ProductResponse{ID: val.ID, Image: val.Image, Name: val.Name, Price: val.Price, Qty: val.Qty, Detail: val.Detail, UserID: val.UserID, User: val.User.Name, CreatedAt: val.CreatedAt, UpdatedAt: val.UpdatedAt})
+			res = append(res, ProductResponse{ID: val.ID, Images: val.Images, Name: val.Name, Price: val.Price, Qty: val.Qty, Detail: val.Detail, UserID: val.UserID, User: val.User.Name, CreatedAt: val.CreatedAt, UpdatedAt: val.UpdatedAt})
 		}
 	}
 	return res
