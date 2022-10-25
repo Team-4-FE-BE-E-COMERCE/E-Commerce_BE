@@ -5,7 +5,7 @@ import (
 )
 
 type ProductFormat struct {
-	Image  string `json:"image" form:"image"`
+	Images string `json:"image" form:"image"`
 	Name   string `json:"name" form:"name"`
 	Price  uint   `json:"price" form:"price"`
 	Qty    uint   `json:"qty" form:"qty"`
@@ -17,7 +17,7 @@ func ToCore(i interface{}) product.Core {
 	switch i.(type) {
 	case ProductFormat:
 		cnv := i.(ProductFormat)
-		return product.Core{Image: cnv.Image, Name: cnv.Name, Price: cnv.Price, Qty: cnv.Qty, Detail: cnv.Detail, UserID: cnv.UserID}
+		return product.Core{Images: cnv.Images, Name: cnv.Name, Price: cnv.Price, Qty: cnv.Qty, Detail: cnv.Detail, UserID: cnv.UserID}
 	}
 	return product.Core{}
 }
