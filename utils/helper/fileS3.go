@@ -72,14 +72,14 @@ func UploadPosts(c echo.Context) (string, error) {
 
 	s3Config := &aws.Config{
 		Region:      aws.String("ap-southeast-1"),
-		Credentials: credentials.NewStaticCredentials(os.Getenv("ACCESS_KEY_IAM"), os.Getenv("SECRET_KEY_IAM"), ""),
+		Credentials: credentials.NewStaticCredentials(os.Getenv("AWS_ACCESS_KEY_ID"), os.Getenv("AWS_SECRET_ACCESS_KEY"), ""),
 	}
 	s3Session := session.New(s3Config)
 
 	uploader := s3manager.NewUploader(s3Session)
 
 	input := &s3manager.UploadInput{
-		Bucket:      aws.String("gohubalta"),                                      // bucket's name
+		Bucket:      aws.String("alta-e-commerce"),                                // bucket's name
 		Key:         aws.String("posts/" + randomStr + "-" + fileheader.Filename), // files destination location
 		Body:        file,                                                         // content of the file
 		ContentType: aws.String("image/jpg"),                                      // content type

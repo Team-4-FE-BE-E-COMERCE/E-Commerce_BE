@@ -16,35 +16,35 @@ func New(repo product.DataInterface) product.UsecaseInterface {
 	return &productService{qry: repo}
 }
 
-func (ps *productService) Create(data product.Core) (row uint, err error) {
+func (ps *productService) Create(data product.Core) (product.Core, error) {
 	res, err := ps.qry.Insert(data)
 	if err != nil {
 		if strings.Contains(err.Error(), "duplicate") {
-			return row, errors.New("rejected from database")
+			return product.Core{}, errors.New("rejected from database")
 		}
-		return row, errors.New("some problem on database")
+		return product.Core{}, errors.New("some problem on database")
 	}
 	return res, nil
 }
 
-func (ps *productService) Update(data product.Core, id uint) (row uint, err error) {
+func (ps *productService) Update(data product.Core, id uint) (product.Core, error) {
 	res, err := ps.qry.Edit(data, id)
 	if err != nil {
 		if strings.Contains(err.Error(), "column") {
-			return row, errors.New("rejected from database")
+			return product.Core{}, errors.New("rejected from database")
 		}
-		return row, errors.New("some problem on database")
+		return product.Core{}, errors.New("some problem on database")
 	}
 	return res, nil
 }
 
-func (ps *productService) Delete(id uint) (row uint, err error) {
+func (ps *productService) Delete(id uint) (product.Core, error) {
 	res, err := ps.qry.Remove(id)
 	if err != nil {
 		if strings.Contains(err.Error(), "table") {
-			return row, errors.New("database error")
+			return product.Core{}, errors.New("database error")
 		} else if strings.Contains(err.Error(), "found") {
-			return row, errors.New("no data")
+			return product.Core{}, errors.New("no data")
 		}
 	}
 	return res, nil
