@@ -33,14 +33,3 @@ func toCore(data UserRequest) user.Core {
 		Bio:      data.Bio,
 	}
 }
-
-func ToDomain(i interface{}) user.Core {
-	switch i.(type) {
-
-	case UpdateFormat:
-		cnv := i.(UpdateFormat)
-		return user.Core{ID: cnv.ID, Name: cnv.Name, Saldo: uint(cnv.Saldo), Password: cnv.Password, Images: cnv.Images, Email: cnv.Email, Phone: cnv.Phone, Bio: cnv.Bio}
-
-	}
-	return user.Core{}
-}
