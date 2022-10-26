@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: mdanys/e-ecommerce:latest
+          tags: mdanys/e-commerce:latest
       - 
         name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
@@ -38,5 +38,5 @@ jobs:
           script: |
             docker stop project-ecommerce
             docker rm project-ecommerce
-            docker rmi project-ecommerce:latest
+            docker rmi mdanys/e-commerce:latest
             docker run --name project-ecommerce --link mysqlbe12 -d -p 80:8000 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_HOST=${{ secrets.DB_HOST }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_NAME=${{ secrets.DB_NAME }} -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} -e AWS_REGION=${{ secrets.AWS_REGION }} -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} mdanys/e-commerce
