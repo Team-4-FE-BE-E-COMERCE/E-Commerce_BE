@@ -21,11 +21,11 @@ func New(e *echo.Echo, usecase user.UsecaseInterface) {
 	handler := &UserDelivery{
 		userUsecase: usecase,
 	}
-	e.POST("/register", handler.PostData) // Daftar akun
-	e.PUT("/update", handler.UpdateUser, middlewares.JWTMiddleware())
-	e.GET("/profile", handler.GetByTokenJWT, middlewares.JWTMiddleware())
-	e.GET("/profile/:id", handler.GetByIdWithJWT, middlewares.JWTMiddleware())
-	e.DELETE("/profile", handler.DeleteMyAccount, middlewares.JWTMiddleware())
+	e.POST("/users", handler.PostData) // Daftar akun
+	e.PUT("/users", handler.UpdateUser, middlewares.JWTMiddleware())
+	e.GET("/users", handler.GetByTokenJWT, middlewares.JWTMiddleware())
+	e.GET("/users/:id", handler.GetByIdWithJWT, middlewares.JWTMiddleware())
+	e.DELETE("/users", handler.DeleteMyAccount, middlewares.JWTMiddleware())
 
 }
 
