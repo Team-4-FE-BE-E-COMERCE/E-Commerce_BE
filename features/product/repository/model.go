@@ -7,19 +7,19 @@ import (
 )
 
 type User struct {
-	ID   uint
-	Name string
+	ID   uint   `json:"id" form:"id"`
+	Name string `json:"name_user" form:"name_user"`
 }
 
 type Products struct {
 	gorm.Model
-	Images string
-	Name   string
-	Price  uint
-	Qty    uint
-	Detail string
-	UserID uint
-	User   User
+	Images string `json:"images" form:"images"`
+	Name   string `json:"name" form:"name"`
+	Price  uint   `json:"price" form:"price"`
+	Stock  uint   `json:"stock" form:"stock"`
+	Detail string `json:"detail" form:"detail"`
+	UserID uint   `json:"user_id" form:"user_id"`
+	User   User   `gorm:"foreignKey:UserID"`
 }
 
 func FromCore(pc product.Core) Products {
@@ -28,10 +28,9 @@ func FromCore(pc product.Core) Products {
 		Images: pc.Images,
 		Name:   pc.Name,
 		Price:  pc.Price,
-		Qty:    pc.Qty,
+		Stock:  pc.Stock,
 		Detail: pc.Detail,
 		UserID: pc.UserID,
-		User:   User{ID: pc.ID, Name: pc.Name},
 	}
 }
 
@@ -41,10 +40,10 @@ func ToCore(p Products) product.Core {
 		Images:    p.Images,
 		Name:      p.Name,
 		Price:     p.Price,
-		Qty:       p.Qty,
+		Stock:     p.Stock,
 		Detail:    p.Detail,
 		UserID:    p.UserID,
-		User:      product.User{ID: p.ID, Name: p.Name},
+		User:      product.User(p.User),
 		CreatedAt: p.CreatedAt,
 		UpdatedAt: p.UpdatedAt,
 	}
@@ -53,7 +52,7 @@ func ToCore(p Products) product.Core {
 func ToCoreArray(pa []Products) []product.Core {
 	var res []product.Core
 	for _, val := range pa {
-		res = append(res, product.Core{ID: val.ID, Images: val.Images, Name: val.Name, Price: val.Price, Qty: val.Qty, Detail: val.Detail, UserID: val.UserID, User: product.User{ID: val.ID, Name: val.Name}})
+		res = append(res, product.Core{ID: val.ID, Images: val.Images, Name: val.Name, Price: val.Price, Stock: val.Stock, Detail: val.Detail, UserID: val.UserID, User: product.User(val.User), CreatedAt: val.CreatedAt, UpdatedAt: val.UpdatedAt})
 	}
 	return res
 }

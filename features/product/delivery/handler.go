@@ -23,7 +23,7 @@ func New(e *echo.Echo, srv product.UsecaseInterface) {
 	e.DELETE("/products/:id", handler.Delete(), middleware.JWT([]byte(cf.SECRET_JWT)))
 	e.GET("/products", handler.ShowAll())
 	e.GET("/products/:id", handler.ShowByID())
-	e.GET("/myproducts", handler.ShowMy(), middleware.JWT([]byte(cf.SECRET_JWT)))
+	e.GET("/products/me", handler.ShowMy(), middleware.JWT([]byte(cf.SECRET_JWT)))
 }
 
 func (ph *productHandler) Create() echo.HandlerFunc {
@@ -32,28 +32,28 @@ func (ph *productHandler) Create() echo.HandlerFunc {
 		userId := middlewares.ExtractToken(c)
 		input.UserID = uint(userId)
 
-		if err := c.Bind(&input); err != nil {
-			return c.JSON(http.StatusBadRequest, failResponse("cannot bind input"))
-		}
-
-		file, _ := c.FormFile("images")
+		file, errFile := c.FormFile("images")
 		if file != nil {
-			res, err := helper.UploadProfile(c)
+			res, err := helper.UploadPosts(c)
 			if err != nil {
 				return err
 			}
 			input.Images = res
 		}
-		// if errFile != nil {
-		// 	return errFile
-		// }
+		if errFile != nil {
+			return errFile
+		}
+
+		if err := c.Bind(&input); err != nil {
+			return c.JSON(http.StatusBadRequest, failResponse("cannot bind input"))
+		}
 
 		cnv := ToCore(input)
 		res, err := ph.srv.Create(cnv)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, failResponse(err.Error()))
 		}
-		return c.JSON(http.StatusCreated, successResponse("success create new product", toResponse(res, "product")))
+		return c.JSON(http.StatusCreated, successResponse("success create new product", res))
 	}
 }
 
@@ -68,24 +68,24 @@ func (ph *productHandler) Update() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, failResponse("cannot bind input"))
 		}
 
-		file, _ := c.FormFile("images")
+		file, errFile := c.FormFile("images")
 		if file != nil {
-			res, err := helper.UploadProfile(c)
+			res, err := helper.UploadPosts(c)
 			if err != nil {
 				return err
 			}
 			input.Images = res
 		}
-		// if errFile != nil {
-		// 	return errFile
-		// }
+		if errFile != nil {
+			return errFile
+		}
 
 		cnv := ToCore(input)
 		res, err := ph.srv.Update(cnv, uint(id))
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, failResponse(err.Error()))
 		}
-		return c.JSON(http.StatusCreated, successResponse("success update product", toResponse(res, "product")))
+		return c.JSON(http.StatusCreated, successResponse("success update product", res))
 	}
 }
 
@@ -96,7 +96,7 @@ func (ph *productHandler) Delete() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, failResponse(err.Error()))
 		}
-		return c.JSON(http.StatusAccepted, successResponse("success delete product", toResponse(res, "product")))
+		return c.JSON(http.StatusAccepted, successResponse("success delete product", toResponse(res, "delete")))
 	}
 }
 
@@ -106,7 +106,7 @@ func (ph *productHandler) ShowAll() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, failResponse(err.Error()))
 		}
-		return c.JSON(http.StatusOK, successResponse("success get all product", toResponse(res, "all")))
+		return c.JSON(http.StatusOK, successResponse("success get all product", res))
 	}
 }
 
@@ -117,7 +117,7 @@ func (ph *productHandler) ShowByID() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, failResponse(err.Error()))
 		}
-		return c.JSON(http.StatusOK, successResponse("success get product by id", toResponse(res, "product")))
+		return c.JSON(http.StatusOK, successResponse("success get product by id", res))
 	}
 }
 
@@ -128,6 +128,6 @@ func (ph *productHandler) ShowMy() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, failResponse(err.Error()))
 		}
-		return c.JSON(http.StatusOK, successResponse("success get my product", toResponse(res, "all")))
+		return c.JSON(http.StatusOK, successResponse("success get my product", res))
 	}
 }
