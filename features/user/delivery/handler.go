@@ -40,7 +40,7 @@ func (delivery *UserDelivery) PostData(c echo.Context) error {
 
 	file, _ := c.FormFile("images")
 	if file != nil {
-		res, err := helper.UploadProfile(c)
+		res, err := helper.UploadPosts(c)
 		if err != nil {
 			return err
 		}
@@ -79,7 +79,7 @@ func (delivery *UserDelivery) UpdateUser(c echo.Context) error {
 
 	file, _ := c.FormFile("images")
 	if file != nil {
-		res, err := helper.UploadProfile(c)
+		res, err := helper.UploadPosts(c)
 		if err != nil {
 			return err
 		}
@@ -140,10 +140,11 @@ func (delivery *UserDelivery) GetByTokenJWT(c echo.Context) error {
 	}
 
 	respon := FromCore(res)
-
+	// data := FromUser()
 	return c.JSON(200, map[string]interface{}{
 		"message": "success get my profile",
 		"data":    respon,
+		// "product": res,
 	})
 }
 

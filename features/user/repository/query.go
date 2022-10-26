@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"log"
 	"project/e-commerce/features/user"
 
 	"gorm.io/gorm"
@@ -39,14 +40,32 @@ func (repo *userData) UpdateData(data user.Core) (row int, err error) {
 	return int(tx.RowsAffected), nil
 }
 
+func (repo *userData) product() []Product {
+
+	var ProductMe []Product
+	tx := repo.db.Find(&ProductMe) //.Preload("User")
+	if tx.Error != nil {
+		return nil
+	}
+
+	return ProductMe
+
+}
+
 func (repo *userData) MyProfile(token int) (user.Core, error) {
 
 	var data User
+
 	tx := repo.db.First(&data, token)
 	if tx.Error != nil {
 		return user.Core{}, tx.Error
 	}
-	return data.toCore(), nil
+	allProduct := repo.product()
+	dataPostUser := data.toUserCore(allProduct)
+
+	log.Print(dataPostUser)
+
+	return dataPostUser, nil
 
 }
 
@@ -67,11 +86,10 @@ func (repo *userData) SelectDataId(param, token int) (user.Core, error) {
 	if tx.Error != nil {
 		return user.Core{}, tx.Error
 	}
+	allProduct := repo.product()
+	dataPostUser := data.toUserCore(allProduct)
 
-	// bookList := repo.toUserCore()
-
-	userId := data.toCore()
-	return userId, nil
+	return dataPostUser, nil
 
 }
 func (repo *userData) DeleteData(token int) (int, error) {
