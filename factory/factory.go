@@ -19,6 +19,10 @@ import (
 	cartDelivery "project/e-commerce/features/cart/delivery"
 	cartData "project/e-commerce/features/cart/repository"
 	cartUsecase "project/e-commerce/features/cart/service"
+
+	transactionDelivery "project/e-commerce/features/order/delivery"
+	transactionData "project/e-commerce/features/order/repository"
+	transactionUsecase "project/e-commerce/features/order/service"
 )
 
 func InitFactory(e *echo.Echo, db *gorm.DB) {
@@ -38,4 +42,8 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	cartDataFactory := cartData.New(db)
 	cartUsecaseFactory := cartUsecase.New(cartDataFactory)
 	cartDelivery.New(e, cartUsecaseFactory)
+
+	transactionDataFactory := transactionData.New(db)
+	transactionUsecaseFactory := transactionUsecase.New(transactionDataFactory)
+	transactionDelivery.New(e, transactionUsecaseFactory)
 }
