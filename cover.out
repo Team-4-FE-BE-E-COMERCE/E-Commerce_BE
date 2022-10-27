@@ -1,7 +1,16 @@
 mode: set
-project/e-commerce/features/login/service/logic.go:16.59,20.2 1 1
-project/e-commerce/features/login/service/logic.go:22.81,24.16 2 1
-project/e-commerce/features/login/service/logic.go:29.2,31.18 3 1
-project/e-commerce/features/login/service/logic.go:35.2,37.24 2 1
-project/e-commerce/features/login/service/logic.go:24.16,27.3 2 1
-project/e-commerce/features/login/service/logic.go:31.18,34.3 2 0
+project/e-commerce/features/cart/service/logic.go:12.57,16.2 1 1
+project/e-commerce/features/cart/service/logic.go:18.67,19.25 1 1
+project/e-commerce/features/cart/service/logic.go:23.2,24.16 2 1
+project/e-commerce/features/cart/service/logic.go:27.2,27.17 1 1
+project/e-commerce/features/cart/service/logic.go:19.25,21.3 1 1
+project/e-commerce/features/cart/service/logic.go:24.16,26.3 1 1
+project/e-commerce/features/cart/service/logic.go:30.76,32.16 2 1
+project/e-commerce/features/cart/service/logic.go:35.2,35.17 1 1
+project/e-commerce/features/cart/service/logic.go:32.16,34.3 1 1
+project/e-commerce/features/cart/service/logic.go:38.72,40.16 2 1
+project/e-commerce/features/cart/service/logic.go:44.2,44.17 1 1
+project/e-commerce/features/cart/service/logic.go:40.16,42.3 1 1
+project/e-commerce/features/cart/service/logic.go:47.84,49.16 2 1
+project/e-commerce/features/cart/service/logic.go:52.2,52.17 1 1
+project/e-commerce/features/cart/service/logic.go:49.16,51.3 1 1
