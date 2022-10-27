@@ -76,23 +76,20 @@ type DBTransaction struct {
 	ID       uint
 }
 
-func insertJoin(data Results) result {
-	var dataRes result
-	// // for _, v := range data {
-	// 	dataRes = append(dataRes, result{
-	// 		Quantity:   v.Quantity,
-	// 		TotalPrice: v.Price,
-	// 		CartID:     v.ID,
-	// 		// OrderStatus: v.OrderStatus,
-	// 	})
-	// }
-
-	return result{
-		CartID:     dataRes.CartID,
-		Quantity:   dataRes.Quantity,
-		TotalPrice: dataRes.TotalPrice,
+func insertJoin(data []Results) []result {
+	var dataRes []result
+	for _, v := range data {
+		dataRes = append(dataRes, result{
+			Quantity:   v.Quantity,
+			TotalPrice: v.Price,
+			CartID:     v.ID,
+			// OrderStatus: v.OrderStatus,
+		})
 	}
+	return dataRes
+
 }
+
 func FromCore(data order.Core) Transaction {
 	return Transaction{
 		Model:       gorm.Model{ID: data.ID, CreatedAt: data.CreatedAt, UpdatedAt: data.Updated},
@@ -103,24 +100,19 @@ func FromCore(data order.Core) Transaction {
 	}
 }
 
-func insert(res result) Transaction {
-	var data Transaction
-	// for _, v := range res {
-	// data = append(data, Transaction{
-	// Quantity:    v.Quantity,
-	// TotalPrice:  v.TotalPrice,
-	// CartID:      v.CartID,
-	// OrderStatus: "waiting",
-	// OrderStatus: v.OrderStatus,
-	// })
-	// }
-
-	return Transaction{
-		Quantity:    data.Quantity,
-		TotalPrice:  data.TotalPrice,
-		OrderStatus: data.OrderStatus,
-		CartID:      data.CartID,
+func insert(res []result) []Transaction {
+	var data []Transaction
+	for _, v := range res {
+		data = append(data, Transaction{
+			Quantity:    v.Quantity,
+			TotalPrice:  v.TotalPrice,
+			CartID:      v.CartID,
+			OrderStatus: "waiting",
+			// OrderStatus: v.OrderStatus,
+		})
 	}
+	return data
+
 }
 
 func (tx *Transaction) toCore() order.Core {
