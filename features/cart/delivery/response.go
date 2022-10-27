@@ -13,9 +13,9 @@ type CartResponse struct {
 }
 
 type TotalRes struct {
-	TotalQuantity int
-	Shipping      string
-	TotalPrice    int
+	TotalQuantity int    `json:"total_quantity"`
+	Shipping      string `json:"shipping"`
+	TotalPrice    int    `json:"total_price"`
 }
 
 func fromCore(data cart.Core) CartResponse {
