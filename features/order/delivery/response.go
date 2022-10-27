@@ -3,11 +3,11 @@ package delivery
 import "project/e-commerce/features/order"
 
 type ResponHistoryOrder struct {
-	Images      string
-	Name        string
-	Price       uint
-	Quantity    uint
-	TotalPrice  uint
+	Images      string `json:"images"`
+	Name        string `json:"name"`
+	Price       uint   `json:"price"`
+	Quantity    uint   `json:"quantity"`
+	TotalPrice  uint   `json:"total_price"`
 	OrderStatus string `json:"order_status"`
 }
 

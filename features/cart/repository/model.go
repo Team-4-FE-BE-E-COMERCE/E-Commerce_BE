@@ -8,9 +8,9 @@ import (
 
 type Cart struct {
 	gorm.Model
-	Quantity  int
-	ProductID uint
-	UserID    uint
+	Quantity  int  `json:"quantity" form:"quantity"`
+	ProductID uint `json:"product_id" form:"product_id"`
+	UserID    uint `json:"user_id" form:"user_id"`
 }
 
 type Results struct {
