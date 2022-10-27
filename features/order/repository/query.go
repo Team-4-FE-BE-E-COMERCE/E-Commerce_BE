@@ -18,27 +18,79 @@ func New(db *gorm.DB) order.DataInterface {
 }
 
 func (repo *transactionData) InsertData(token int, dataReq order.AddressCore, dataPay order.PaymentCore) (int, error) {
-	var reqTran Transaction //= FromCore(inputTransaction)
-	txTr := repo.db.Create(&reqTran)
-	if txTr.Error != nil {
-		return -1, txTr.Error
-	}
+	// var reqTran Transaction //= FromCore(inputTransaction)
+	// txTr := repo.db.Create(&reqTran)
+	// if txTr.Error != nil {
+	// 	return -1, txTr.Error
+	// }
 
-	// var inputTransaction Results
+	// // var inputTransaction Results
+	// // tx := repo.db.Model(&Product{}).Select("carts.id, carts.quantity, products.name, products.images, products.price, carts.user_id, carts.product_id").Joins("inner join carts on carts.product_id = products.id").Where("carts.user_id = ?", token).Scan(&inputTransaction)
+	// // if tx.Error != nil {
+	// // 	return -1, tx.Error
+	// // }
+
+	// dataRes := insertJoin(Results{})
+	// data := insert(dataRes)
+
+	// // for i, v := range data {
+	// data.TotalPrice = data.TotalPrice * data.Quantity
+	// txCreate := repo.db.Create(&data.TotalPrice)
+	// if txCreate.Error != nil {
+	// 	return -1, txCreate.Error
+	// }
+	// // }
+
+	// // var id []int
+	// // str := "waiting"
+	// // txId := repo.db.Model(&Cart{}).Select("transactions.id").Joins("inner join transactions on transactions.cart_id = carts.id").Where("carts.user_id = ? AND transactions.order_status = ?", token, str).Scan(&id)
+	// // if txId.Error != nil {
+	// // 	return -1, txId.Error
+	// // }
+
+	// // for _, v := range id {
+
+	// dataReq.TransactionID = data.ID
+	// dataCreate := toDb(dataReq)
+	// txCreate = repo.db.Create(&dataCreate)
+	// if txCreate.Error != nil {
+	// 	return -1, txCreate.Error
+	// }
+
+	// dataPay.TransactionID = dataReq.TransactionID
+	// dataCreatePay := toDbPay(dataPay)
+	// txCreatePay := repo.db.Create(&dataCreatePay)
+	// if txCreatePay.Error != nil {
+	// 	return -1, txCreatePay.Error
+	// }
+
+	// var trCore order.Core
+
+	// var trans Transaction
+	// txNew := repo.db.Joins("Product").Joins("Cart").First(&trans, "id = ?", trCore.ID)
+	// if txNew.Error != nil {
+	// 	return -1, txNew.Error
+	// }
+
+	// // }
+	// return 1, nil
+
+	//==================================
+	// var inputTransaction []Results
 	// tx := repo.db.Model(&Product{}).Select("carts.id, carts.quantity, products.name, products.images, products.price, carts.user_id, carts.product_id").Joins("inner join carts on carts.product_id = products.id").Where("carts.user_id = ?", token).Scan(&inputTransaction)
 	// if tx.Error != nil {
 	// 	return -1, tx.Error
 	// }
 
-	dataRes := insertJoin(Results{})
-	data := insert(dataRes)
+	// dataRes := insertJoin(inputTransaction)
+	// data := insert(dataRes)
 
 	// for i, v := range data {
-	data.TotalPrice = data.TotalPrice * data.Quantity
-	txCreate := repo.db.Create(&data.TotalPrice)
-	if txCreate.Error != nil {
-		return -1, txCreate.Error
-	}
+	// 	data[i].TotalPrice = v.TotalPrice * v.Quantity
+	// 	txCreate := repo.db.Create(&data[i])
+	// 	if txCreate.Error != nil {
+	// 		return -1, txCreate.Error
+	// 	}
 	// }
 
 	// var id []int
@@ -50,29 +102,65 @@ func (repo *transactionData) InsertData(token int, dataReq order.AddressCore, da
 
 	// for _, v := range id {
 
-	dataReq.TransactionID = data.ID
-	dataCreate := toDb(dataReq)
-	txCreate = repo.db.Create(&dataCreate)
-	if txCreate.Error != nil {
-		return -1, txCreate.Error
-	}
+	// 	dataReq.TransactionID = uint(v)
+	// 	dataCreate := toDb(dataReq)
+	// 	txCreate := repo.db.Create(&dataCreate)
+	// 	if txCreate.Error != nil {
+	// 		return -1, txCreate.Error
+	// 	}
 
-	dataPay.TransactionID = dataReq.TransactionID
-	dataCreatePay := toDbPay(dataPay)
-	txCreatePay := repo.db.Create(&dataCreatePay)
-	if txCreatePay.Error != nil {
-		return -1, txCreatePay.Error
-	}
-
-	var trCore order.Core
-
-	var trans Transaction
-	txNew := repo.db.Joins("Product").Joins("Cart").First(&trans, "id = ?", trCore.ID)
-	if txNew.Error != nil {
-		return -1, txNew.Error
-	}
+	// 	dataPay.TransactionID = uint(v)
+	// 	dataCreatePay := toDbPay(dataPay)
+	// 	txCreatePay := repo.db.Create(&dataCreatePay)
+	// 	if txCreatePay.Error != nil {
+	// 		return -1, txCreatePay.Error
+	// 	}
 
 	// }
+
+	// return 1, nil
+	var inputTransaction []Results
+	tx := repo.db.Model(&Product{}).Select("carts.id, carts.quantity, products.name, products.images, products.price, carts.user_id, carts.product_id").Joins("inner join carts on carts.product_id = products.id").Where("carts.user_id = ?", token).Scan(&inputTransaction)
+	if tx.Error != nil {
+		return -1, tx.Error
+	}
+
+	dataRes := insertJoin(inputTransaction)
+	data := insert(dataRes)
+
+	for i, v := range data {
+		data[i].TotalPrice = v.TotalPrice * v.Quantity
+		txCreate := repo.db.Create(&data[i])
+		if txCreate.Error != nil {
+			return -1, txCreate.Error
+		}
+	}
+
+	var id []int
+	str := "waiting"
+	txId := repo.db.Model(&Cart{}).Select("transactions.id").Joins("inner join transactions on transactions.cart_id = carts.id").Where("carts.user_id = ? AND transactions.order_status = ?", token, str).Scan(&id)
+	if txId.Error != nil {
+		return -1, txId.Error
+	}
+
+	for _, v := range id {
+
+		dataReq.TransactionID = uint(v)
+		dataCreate := toDb(dataReq)
+		txCreate := repo.db.Create(&dataCreate)
+		if txCreate.Error != nil {
+			return -1, txCreate.Error
+		}
+
+		dataPay.TransactionID = uint(v)
+		dataCreatePay := toDbPay(dataPay)
+		txCreatePay := repo.db.Create(&dataCreatePay)
+		if txCreatePay.Error != nil {
+			return -1, txCreatePay.Error
+		}
+
+	}
+
 	return 1, nil
 
 }

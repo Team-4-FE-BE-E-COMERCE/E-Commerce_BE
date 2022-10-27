@@ -11,10 +11,6 @@ type ResponHistoryOrder struct {
 	OrderStatus string `json:"order_status"`
 }
 
-type StatusOrder struct {
-	StatusOrder string
-}
-
 func toRespon(data []order.HistoryOrder) []ResponHistoryOrder {
 	var dataRes []ResponHistoryOrder
 	for i, v := range data {

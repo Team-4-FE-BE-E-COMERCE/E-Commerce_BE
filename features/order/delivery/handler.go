@@ -50,23 +50,6 @@ func (delivery *TransactionDelivery) PostDataOrders(c echo.Context) error {
 
 }
 
-func (delivery *TransactionDelivery) PutStatusConfirm(c echo.Context) error {
-
-	idtoken := middlewares.ExtractToken(c)
-
-	row, err := delivery.transactionUsecase.PutStatus(idtoken, "confirm")
-	if err != nil || row == 0 {
-		return c.JSON(http.StatusNotFound, map[string]interface{}{
-			"message": "low stock product",
-		})
-	}
-
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success status confirmed",
-	})
-
-}
-
 func (delivery *TransactionDelivery) PutDeleteOrder(c echo.Context) error {
 
 	idtoken := middlewares.ExtractToken(c)
@@ -100,4 +83,20 @@ func (delivery *TransactionDelivery) GetOrderHistory(c echo.Context) error {
 		"message":      "succes get history order",
 		"your history": res,
 	})
+}
+func (delivery *TransactionDelivery) PutStatusConfirm(c echo.Context) error {
+
+	idtoken := middlewares.ExtractToken(c)
+
+	row, err := delivery.transactionUsecase.PutStatus(idtoken, "confirm")
+	if err != nil || row == 0 {
+		return c.JSON(http.StatusNotFound, map[string]interface{}{
+			"message": "low stock product",
+		})
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "success status confirmed",
+	})
+
 }
