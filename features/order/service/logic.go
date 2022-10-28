@@ -15,13 +15,13 @@ func New(data order.DataInterface) order.UsecaseInterface {
 	}
 }
 
-func (usecase *transactionUsecase) PostData(token int, data order.AddressCore, dataPay order.PaymentCore) (int, error) {
+func (usecase *transactionUsecase) PostData(token int, data order.AddressCore) (int, error) {
 
 	if data.City == "" || data.PostCode == 0 || data.Province == "" || data.Street == "" {
 		return -1, errors.New("error")
 	}
 
-	row, err := usecase.transactionData.InsertData(token, data, dataPay)
+	row, err := usecase.transactionData.InsertData(token, data)
 	if err != nil {
 		return -1, err
 	}

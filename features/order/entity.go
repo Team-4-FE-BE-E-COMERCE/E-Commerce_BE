@@ -23,7 +23,7 @@ type AddressCore struct {
 
 type PaymentCore struct {
 	TransactionID uint
-	Payment interface{}
+	Payment       string
 }
 
 type HistoryOrder struct {
@@ -39,14 +39,14 @@ type OrderStatusCore struct {
 }
 
 type UsecaseInterface interface {
-	PostData(token int, data AddressCore, dataPay PaymentCore) (int, error)
+	PostData(token int, data AddressCore) (int, error)
 	PutStatus(token int, status string) (int, error)
 	DeleteOrder(token int, status string) (int, error)
 	GetOrder(token int) ([]HistoryOrder, error)
 }
 
 type DataInterface interface {
-	InsertData(token int, data AddressCore, dataPay PaymentCore) (int, error)
+	InsertData(token int, data AddressCore) (int, error)
 	UpdateStatus(token int, status string) (int, error)
 	CancelOrder(token int, status string) (int, error)
 	SelectOrder(token int) ([]HistoryOrder, error)

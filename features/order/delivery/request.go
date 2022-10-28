@@ -7,10 +7,9 @@ type Request struct {
 	City     string `json:"city" form:"city"`
 	Province string `json:"province" form:"province"`
 	PostCode uint   `json:"postcode" form:"postcode"`
-	Payment  interface{}
 }
 
-func (data *Request) fromCore() (order.AddressCore, order.PaymentCore) {
+func (data *Request) fromCore() order.AddressCore {
 	dataAddress := order.AddressCore{
 		Street:   data.Street,
 		City:     data.City,
@@ -18,10 +17,6 @@ func (data *Request) fromCore() (order.AddressCore, order.PaymentCore) {
 		PostCode: data.PostCode,
 	}
 
-	dataPayment := order.PaymentCore{
-		Payment: data.Payment,
-	}
-
-	return dataAddress, dataPayment
+	return dataAddress
 
 }

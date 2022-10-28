@@ -16,7 +16,7 @@ type Transaction struct {
 
 type Payment struct {
 	TransactionID uint `gorm:"primary_key;ForeignKey:TransactionID"`
-	Payment       interface{}
+	Payment       string
 }
 
 type Address struct {

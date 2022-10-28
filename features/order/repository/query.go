@@ -17,7 +17,7 @@ func New(db *gorm.DB) order.DataInterface {
 	}
 }
 
-func (repo *transactionData) InsertData(token int, dataReq order.AddressCore, dataPay order.PaymentCore) (int, error) {
+func (repo *transactionData) InsertData(token int, dataReq order.AddressCore) (int, error) {
 
 	var inputTransaction []Results
 	tx := repo.db.Model(&Product{}).Select("carts.id, carts.quantity, products.name, products.images, products.price, carts.user_id, carts.product_id").Joins("inner join carts on carts.product_id = products.id").Where("carts.user_id = ?", token).Scan(&inputTransaction)
@@ -50,13 +50,6 @@ func (repo *transactionData) InsertData(token int, dataReq order.AddressCore, da
 		txCreate := repo.db.Create(&dataCreate)
 		if txCreate.Error != nil {
 			return -1, txCreate.Error
-		}
-
-		dataPay.TransactionID = uint(v)
-		dataCreatePay := toDbPay(dataPay)
-		txCreatePay := repo.db.Create(&dataCreatePay)
-		if txCreatePay.Error != nil {
-			return -1, txCreatePay.Error
 		}
 
 	}

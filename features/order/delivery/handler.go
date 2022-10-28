@@ -49,11 +49,10 @@ func (delivery *TransactionDelivery) PostDataOrders(c echo.Context) error {
 	}
 
 	snapResp, _ := sc.CreateTransaction(Req)
-	data.Payment = snapResp
 
-	requestAddress, requestPayment := data.fromCore()
+	requestAddress := data.fromCore()
 
-	row, err := delivery.transactionUsecase.PostData(idtoken, requestAddress, requestPayment)
+	row, err := delivery.transactionUsecase.PostData(idtoken, requestAddress)
 	if err != nil || row == 0 {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
 			"message": "failed checkout",
@@ -62,6 +61,7 @@ func (delivery *TransactionDelivery) PostDataOrders(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "succes status waiting",
+		"data":    snapResp,
 	})
 
 }
