@@ -23,12 +23,7 @@ type AddressCore struct {
 
 type PaymentCore struct {
 	TransactionID uint
-	Visa          string
-	Name          string
-	Number        uint
-	Cvv2          uint
-	Month         uint
-	Year          uint
+	Payment interface{}
 }
 
 type HistoryOrder struct {

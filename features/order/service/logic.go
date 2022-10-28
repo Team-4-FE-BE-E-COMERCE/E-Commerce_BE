@@ -17,7 +17,7 @@ func New(data order.DataInterface) order.UsecaseInterface {
 
 func (usecase *transactionUsecase) PostData(token int, data order.AddressCore, dataPay order.PaymentCore) (int, error) {
 
-	if data.City == "" || data.PostCode == 0 || data.Province == "" || data.Street == "" || dataPay.Name == "" || dataPay.Cvv2 == 0 || dataPay.Month == 0 || dataPay.Month > 12 || dataPay.Year == 0 || dataPay.Number == 0 || dataPay.Visa == "" {
+	if data.City == "" || data.PostCode == 0 || data.Province == "" || data.Street == "" {
 		return -1, errors.New("error")
 	}
 

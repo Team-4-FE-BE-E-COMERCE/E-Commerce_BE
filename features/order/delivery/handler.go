@@ -2,10 +2,13 @@ package delivery
 
 import (
 	"net/http"
+	"os"
 	"project/e-commerce/features/order"
 	"project/e-commerce/middlewares"
 
 	"github.com/labstack/echo/v4"
+	"github.com/midtrans/midtrans-go"
+	"github.com/midtrans/midtrans-go/snap"
 )
 
 type TransactionDelivery struct {
@@ -34,6 +37,19 @@ func (delivery *TransactionDelivery) PostDataOrders(c echo.Context) error {
 			"message": "error bind data",
 		})
 	}
+
+	var sc = snap.Client{}
+	sc.New(os.Getenv("SERVER_KEY"), midtrans.Sandbox)
+
+	Req := &snap.Request{
+		TransactionDetails: midtrans.TransactionDetails{
+			OrderID:  "ORDER-12345",
+			GrossAmt: 100000,
+		},
+	}
+
+	snapResp, _ := sc.CreateTransaction(Req)
+	data.Payment = snapResp
 
 	requestAddress, requestPayment := data.fromCore()
 

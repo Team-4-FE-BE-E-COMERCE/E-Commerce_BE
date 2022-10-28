@@ -16,12 +16,7 @@ type Transaction struct {
 
 type Payment struct {
 	TransactionID uint `gorm:"primary_key;ForeignKey:TransactionID"`
-	Visa          string
-	Name          string
-	Number        uint
-	Cvv2          uint
-	Month         uint
-	Year          uint
+	Payment       interface{}
 }
 
 type Address struct {
@@ -141,12 +136,7 @@ func toDb(data order.AddressCore) Address {
 
 func toDbPay(data order.PaymentCore) Payment {
 	return Payment{
-		Visa:   data.Visa,
-		Name:   data.Name,
-		Number: data.Number,
-		Cvv2:   data.Cvv2,
-		Month:  data.Month,
-		Year:   data.Year,
+		Payment: data.Payment,
 	}
 
 }
